@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: lifen_db
+    password: lifen_db@1
+    url: jdbc:mysql://59783869de818.gz.cdb.myqcloud.com:5211/lifen_project?characterEncoding=utf-8&useSSL=false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  jackson:
+    default-property-inclusion: non_null
+  thymeleaf:
+    mode: HTML5
+    cache: false
+server:
+  context-path: /lifen
+  port: 8001
+projectUrl:
+  loginUrl: /home/index
+

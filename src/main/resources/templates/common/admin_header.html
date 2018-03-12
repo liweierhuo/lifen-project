@@ -1,0 +1,22 @@
+<!-- 头部 -->
+<div id="admin_header">
+    <div class="layui-logo">成果管理平台</div>
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                <img id="userHead" src="/assets/images/head.jpg" class="layui-nav-img" th:src="@{/assets/images/head.jpg}"/><span id="userNickName"></span>
+            </a>
+            <dl class="layui-nav-child">
+                <dd>
+                    <a href="javascript:myInfo();"><i class="layui-icon">&#xe612;</i>&emsp;个人信息</a>
+                </dd>
+                <dd>
+                    <a href="javascript:updatePsw();"><i class="layui-icon">&#xe631;</i>&emsp;修改密码</a>
+                </dd>
+                <dd>
+                    <a href="javascript:loginOut();"><i class="layui-icon">&#xe66d;</i>&emsp;退出登录</a>
+                </dd>
+            </dl>
+        </li>
+    </ul>
+</div>

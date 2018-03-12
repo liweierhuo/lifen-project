@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>大学生创新创业成果</title>
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" href="/assets/css/comment.css" th:href="@{/assets/css/comment.css}"/>
+    <link rel="stylesheet" href="../../static/assets/css/login.css" media="all" th:href="@{/assets/css/login.css}"/>
+</head>
+<body>
+<div class="layadmin-user-login" id="LAY-user-login" style="width:96%;margin-left:auto;margin-right:auto;">
+    <div class="layadmin-user-login-main">
+        <div class="layadmin-user-login-box layadmin-user-login-header">
+            <h2>注册</h2>
+            <p> <a href="javascript:load('login');" class="layadmin-user-jump-change layadmin-link"
+                   style="margin-top: 7px;">已有账号？登录</a></p>
+        </div>
+
+        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+            <form class="layui-form" action="" id="user_reg_form" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户类型</label>
+                    <div class="layui-input-block" lay-filter="LAY-user-reg-redio">
+                        <input type="radio" name="userType" id="userTypeStu" value="2" title="学生" checked="checked"
+                               lay-filter="LAY-user-reg-stu"/>
+                        <input type="radio" name="userType" id="userTypeTeacher" value="1" title="教师"
+                               lay-filter="LAY-user-reg-teacher"/>
+                    </div>
+                </div>
+                <input name="userId" type="hidden"/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-block">
+                        <input name="userAccount" placeholder="请输入账号" type="text" class="layui-input" maxlength="20"
+                               lay-verify="required" required="required"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-block">
+                        <input name="userName" placeholder="请输入姓名" type="text" class="layui-input" maxlength="20"
+                               lay-verify="required" required="required"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input name="userPwd" placeholder="请输入密码" type="password" class="layui-input"
+                               lay-verify="required|userPwd" required="required"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">确认密码</label>
+                    <div class="layui-input-block">
+                        <input name="confirmUserPwd" placeholder="请输入确认密码" type="password" class="layui-input"
+                               lay-verify="required|confirmUserPwd" required="required"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="gender" id="genderMan" value="男" title="男" checked="checked"/>
+                        <input type="radio" name="gender" id="genderWoman" value="女" title="女"/>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="teacherTitle">
+                    <label class="layui-form-label">教师职称</label>
+                    <div class="layui-input-block">
+                        <input name="userTitle" placeholder="请输入教师职称" type="text" class="layui-input" maxlength="20"/>
+                    </div>
+                </div>
+
+                <div class="layui-form-item" id="department">
+                    <label class="layui-form-label">所在学院</label>
+                    <div class="layui-input-block">
+                        <input name="department" placeholder="请输入所在学院" type="text" class="layui-input" maxlength="20"
+                               />
+                    </div>
+                </div>
+
+                <div class="layui-form-item" id="userClass">
+                    <label class="layui-form-label">所在班级</label>
+                    <div class="layui-input-block">
+                        <input name="userClass" placeholder="请输入所在班级" type="text" class="layui-input" maxlength="20"
+                               />
+                    </div>
+                </div>
+
+                <div class="layui-form-item" id="studentNo">
+                    <label class="layui-form-label">所在班级</label>
+                    <div class="layui-input-block">
+                        <input name="studentNo" placeholder="请输入学号" type="text" class="layui-input" maxlength="20"/>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">手机号</label>
+                    <div class="layui-input-block">
+                        <input name="mobile" placeholder="请输入手机号" type="text" class="layui-input" maxlength="20"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input name="email" placeholder="请输入邮箱" type="text" class="layui-input" maxlength="20"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="true" lay-filter="LAY-user-reg-submit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../../static/assets/libs/jquery/jquery-3.2.1.min.js"
+        th:src="@{/assets/libs/jquery/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" src="../../static/assets/libs/layui/layui.js"
+        th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" src="../../static/assets/js/web/comment_web.js"
+        th:src="@{/assets/js/web/comment_web.js}"></script>
+<script>
+    var appServer = "http://127.0.0.1:8001/lifen/";
+    layui.use(['form'], function () {
+        var form = layui.form;
+        checkLogin();
+        //提交
+        form.on('submit(LAY-user-reg-submit)', function (obj) {
+            layer.load(1);
+            $.post(appServer + "uc/add_user", obj.field, function (data) {
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    location.replace(appServer+"login.html");
+                } else {
+                    layer.closeAll('loading');
+                    layer.msg(data.msg, {icon: 2});
+                    return false;
+                }
+            }, "json");
+            return false;
+        });
+        isStu();
+        form.on('radio(LAY-user-reg-stu)', function (data) {
+            console.log(data.value); //被点击的radio的value值
+            if (data.value == '2') {
+                isStu();
+            }
+        });
+        form.on('radio(LAY-user-reg-teacher)', function (data) {
+            console.log(data.value); //被点击的radio的value值
+            isStu();
+        });
+
+        layui.form.verify({
+            confirmUserPwd: function(value, item){
+                var userPwd = $("#user_reg_form input[name=userPwd]").val();
+                if(value!=userPwd){
+                    return '两次输入密码不一致';
+                }
+            },
+            userPwd: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ]
+        });
+    });
+
+
+    //检查是否登录
+    function checkLogin() {
+        var tempUser = JSON.parse(localStorage.getItem("web_user"));
+        if (tempUser != null) {
+            location.replace(appServer + "index.html");
+        }
+    }
+
+    function isStu() {
+        var userType = $("#user_reg_form input[name=userType]:checked").val();
+        if (userType == '2') {
+            $("#teacherTitle").hide();
+            $("#department").show();
+            $("#userClass").show();
+            $("#studentNo").show();
+        } else {
+            $("#teacherTitle").show();
+            $("#department").hide();
+            $("#userClass").hide();
+            $("#studentNo").hide();
+        }
+
+    }
+</script>
+</html>
