@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
+import javax.persistence.Transient;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,11 +30,19 @@ public class UcUsersServiceImpl implements UcUsersService {
     private UcUsersRepository ucUsersRepository;
 
     @Override
-    public UcUsers login(String account, String pwd,String userType) {
+    @Transient
+    public UcUsers login(String account, String pwd,String userType)  {
         List<UcUsers> users = ucUsersRepository.findAllByUserAccountAndUserType(account, userType);
         if (users != null && users.size() >= 1) {
             if (StringUtils.equals(users.get(0).getUserPwd(),pwd)) {
-                return users.get(0);
+                UcUsers ucUser = users.get(0);
+                ucUser.setLoginNum(ucUser.getLoginNum()+1);
+                try {
+                    ucUser = this.update(ucUser);
+                } catch (Exception e) {
+                    return null;
+                }
+                return ucUser;
             }
         }
         return null;

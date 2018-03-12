@@ -11,7 +11,19 @@
 </head>
 
 <body class="layui-layout-body">
-index页面
-</body>
+<!-- 头部 -->
+	<div th:include="common/header :: #web_header"></div>
 
+<script type="text/javascript" src="../../../static/assets/libs/jquery/jquery-3.2.1.min.js" th:src="@{/assets/libs/jquery/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" src="../../../static/assets/libs/q.js" th:src="@{/assets/libs/q.js}"></script>
+<script type="text/javascript" src="../../../static/assets/libs/layui/layui.all.js" th:src="@{/assets/libs/layui/layui.all.js}"></script>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+
+        //…
+    });
+</script>
+</body>
 </html>
