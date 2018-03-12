@@ -129,7 +129,6 @@
     var appServer = "http://127.0.0.1:8001/lifen/";
     layui.use(['form'], function () {
         var form = layui.form;
-        checkLogin();
         //提交
         form.on('submit(LAY-user-reg-submit)', function (obj) {
             layer.load(1);
@@ -170,15 +169,6 @@
             ]
         });
     });
-
-
-    //检查是否登录
-    function checkLogin() {
-        var tempUser = JSON.parse(localStorage.getItem("web_user"));
-        if (tempUser != null) {
-            location.replace(appServer + "index.html");
-        }
-    }
 
     function isStu() {
         var userType = $("#user_reg_form input[name=userType]:checked").val();
