@@ -1,26 +1,27 @@
 <!--web 的头部-->
 <div id="web_header">
-    <ul class="layui-nav" lay-filter="" style="align-content: center">
-        <li class="layui-nav-item"><a href="">项目中心</a></li>
-        <li class="layui-nav-item layui-this"><a href="">我的项目</a></li>
-       <!-- <li class="layui-nav-item">
-            <a href="javascript:;">解决方案</a>
-            <dl class="layui-nav-child"> &lt;!&ndash; 二级菜单 &ndash;&gt;
-                <dd><a href="">移动模块</a></dd>
-                <dd><a href="">后台模版</a></dd>
-                <dd><a href="">电商平台</a></dd>
-            </dl>
-        </li>-->
-        <li class="layui-nav-item">
-            <a href="">个人中心<span class="layui-badge-dot"></span></a>
-        </li>
-        <li class="layui-nav-item">
-            <a href=""><img src="http://t.cn/RCzsdCq" class="layui-nav-img"/>我</a>
-            <dl class="layui-nav-child">
-                <dd><a href="javascript:;">修改信息</a></dd>
-                <dd><a href="javascript:;">安全管理</a></dd>
-                <dd><a href="javascript:;">退了</a></dd>
-            </dl>
-        </li>
-    </ul>
+    <div class="layui-container">
+        <ul class="layui-nav fly-nav layui-hide-xs">
+            <li class="layui-nav-item">
+                <a href="/index.html" data-pjax="">首页</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/index/music.html" data-pjax="">项目中心</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/index/topic.html" data-pjax="">热门项目</a>
+            </li>
+            <span class="layui-nav-bar" style="left: 56.5px; top: 55px; width: 0px; opacity: 0;">
+
+            </span>
+        </ul>
+        <ul class="layui-nav fly-nav-user">
+            <!-- 未登入的状态 -->
+            <li class="layui-nav-item layui-this">
+                <a class="iconfont icon-touxiang layui-hide-xs" href="/index/user/login.html" data-pjax=""></a>
+            </li>
+            <li class="layui-nav-item"><a href="/index/user/login.html" data-pjax="">登录</a></li>
+            <li class="layui-nav-item"><a href="/index/user/register.html" data-pjax="">注册</a></li>
+            <span class="layui-nav-bar" style="left: 0px; top: 55px; width: 0px; opacity: 0;"></span></ul>
+    </div>
 </div>

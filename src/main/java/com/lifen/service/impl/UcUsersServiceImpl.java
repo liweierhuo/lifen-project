@@ -36,7 +36,7 @@ public class UcUsersServiceImpl implements UcUsersService {
         if (users != null && users.size() >= 1) {
             if (StringUtils.equals(users.get(0).getUserPwd(),pwd)) {
                 UcUsers ucUser = users.get(0);
-                ucUser.setLoginNum(ucUser.getLoginNum()+1);
+                ucUser.setLoginNum(ucUser.getLoginNum() == null ? 0:ucUser.getLoginNum()+1);
                 try {
                     ucUser = this.update(ucUser);
                 } catch (Exception e) {
