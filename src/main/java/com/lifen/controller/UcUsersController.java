@@ -76,7 +76,7 @@ public class UcUsersController {
     public ResultMap doLogin(String account, String password,String userType){
         UcUsers ucUser = ucUsersService.login(account,password,userType);
         if (ucUser != null) {
-            return ResultMap.ok("操作成功");
+            return ResultMap.ok("操作成功").put("user", ucUser);
         } else {
             return ResultMap.error();
         }

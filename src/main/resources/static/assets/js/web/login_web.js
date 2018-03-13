@@ -1,8 +1,8 @@
 var appServer = "http://127.0.0.1:8001/lifen/";
 layui.use(['form'], function() {
 	var form = layui.form;
-	
-	/*checkLogin();*/
+    form.render();
+	checkLogin();
 	//提交
 	form.on('submit(LAY-user-login-submit)', function(obj) {
 		layer.load(1);
@@ -21,17 +21,13 @@ layui.use(['form'], function() {
 	});
 });
 
-/*
 //检查是否登录
-function checkLogin(){
-    var web_user = localStorage.getItem("web_user");
-    if (web_user != null) {
-        var tempUser = JSON.parse(eval(web_user));
-        if (tempUser != null) {
-            location.replace(appServer+"index.html");
-        }
-	}
-}*/
+function checkLogin() {
+    var tempUser = JSON.parse(localStorage.getItem("web_user"));
+    if (tempUser != null) {
+        location.replace(appServer + "index.html");
+    }
+}
 
 //生成uuid
 function guid() {
