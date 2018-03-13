@@ -14,20 +14,19 @@
 	<div th:include="common/header :: #web_header" class="fly-header bg-dark"></div>
 <div id="container">
 	<div class="fly-home fly-panel">
-		<img th:src="@{/assets/images/head.jpg}" alt="user.userName"/>
-		<h1>大哥哥<i class="iconfont icon-nan"></i></h1>
+		<img th:src="@{/assets/images/head.jpg}" th:attr="alt=${session.ucUser.userName}" />
+		<h1>
+			<font th:text="${session.ucUser.userName}"></font>
+			<i th:class="${session.ucUser.gender eq '男'}? 'iconfont icon-nan' : 'iconfont icon-nv'"></i>
+		</h1>
 
 		<p class="fly-home-info">
-			<i class="layui-icon layui-icon-rmb" title="积分"></i><span style="color: #FF7200;">50 积分</span>
-			<i class="iconfont icon-shijian"></i><span>2018-03-13 加入</span>
-			<i class="iconfont icon-chengshi"></i><span>湖北 - 十堰 - </span>
+			<i class="layui-icon"></i>登录次数：<span style="color: #FF7200;" th:text="${session.ucUser.loginNum}"></span>
+			<i class="iconfont icon-shijian"></i>注册时间：<span th:text="${#strings.substring(session.ucUser.createTime,0,10)}"> </span>
+			<i class="iconfont"></i>会员类型：<span th:text="${session.ucUser.userType eq '1' } ? '教师':'学生' "></span>
 		</p>
 
 		<p class="fly-home-sign"></p>
-
-		<div class="fly-sns" data-user="">
-			<a href="javascript:;" class="layui-btn layui-btn-primary" onclick="layer.tips('稍后推出.', this, {tips:4})"><i class="layui-icon"></i>聊天</a>
-		</div>
 
 	</div>
 	<div class="fly-panel fly-column">
@@ -43,9 +42,8 @@
 		</div>
 	</div>
 	<div class="layui-container fly-marginTop">
-
 		<div class="fly-panel fly-panel-user" pad20="" id="containerUserNav">
-			<div class="fly-msg" style="margin: 20px 0;"> Hi，大哥哥，你已是我们的普通会员。</div>
+			<div class="fly-msg" style="margin: 20px 0;" th:text="${'Hi,'+session.ucUser.userName}+'欢迎您'"></div>
 			<div class="fly-msg" style="margin:20px 0;">您的邮箱尚未验证，这比较影响您的帐号安全，<a href="javascript:void(0)" onclick="layer.tips('稍后开放', this, {tips:1})">立即去激活？</a></div>
 			<div class="layui-tab layui-tab-brief" lay-filter="user">
 				<ul class="layui-tab-title" id="LAY_mine">

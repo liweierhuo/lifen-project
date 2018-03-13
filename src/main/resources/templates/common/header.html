@@ -7,13 +7,13 @@
     <div class="layui-container">
         <ul class="layui-nav fly-nav layui-hide-xs">
             <li class="layui-nav-item">
-                <a href="/index.html" data-pjax="">首页</a>
+                <a href="javascript:load('index');" data-pjax="">首页</a>
             </li>
             <li class="layui-nav-item">
-                <a href="/index/music.html" data-pjax="">项目中心</a>
+                <a href="javascript:load('project_list');" data-pjax="">项目中心</a>
             </li>
             <li class="layui-nav-item">
-                <a href="/index/topic.html" data-pjax="">热门项目</a>
+                <a href="javascript:load('hot_project_list');" data-pjax="">热门项目</a>
             </li>
             <span class="layui-nav-bar" style="left: 56.5px; top: 55px; width: 0px; opacity: 0;">
 
@@ -23,10 +23,10 @@
             <!-- 未登入的状态 -->
 
             <li class="layui-nav-item" id="web_userInfo" style="display: none">
-                <a href="javascript:;"><span id="userName"></span></a>
+                <a href="javascript:load('index');"><span id="userName"></span></a>
             </li>
             <li class="layui-nav-item" id="web_restPwd_li" style="display: none">
-                <a href="">修改密码</a>
+                <a href="javascript:modifyUserPwd();">修改密码</a>
             </li>
             <li class="layui-nav-item" id="web_login_out_li" style="display: none">
                 <a href="javascript:loginOut();">退出登录</a>

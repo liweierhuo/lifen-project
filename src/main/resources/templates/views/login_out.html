@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>大学生创新创业成果</title>
+</head>
+<body>
+<script type="text/javascript" src="../../../static/assets/libs/jquery/jquery-3.2.1.min.js"
+        th:src="@{/assets/libs/jquery/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" src="../../../static/assets/libs/layui/layui.all.js"
+        th:src="@{/assets/libs/layui/layui.all.js}"></script>
+<script>
+    var appServer = "http://127.0.0.1:8001/lifen/";
+    $(function () {
+        layer.msg("你已经超时退出登录",{icon: 2});
+        loginOut();
+    });
+    //退出登录
+    function loginOut(){
+        localStorage.removeItem("web_user");
+        layer.load(1);
+        location.replace(appServer+"/login.html");
+    }
+</script>
+</body>
+</html>

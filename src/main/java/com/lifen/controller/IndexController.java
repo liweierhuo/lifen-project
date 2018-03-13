@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @Slf4j
@@ -24,6 +25,9 @@ public class IndexController {
     @GetMapping(value= "{path}")
     public String loginOut(@PathVariable("path") String path, HttpServletRequest request, Model model) {
         log.info("访问页面"+path);
+        if (request.getSession().getAttribute("ucUser") == null) {
+            return "views/login_out";
+        }
         model.addAttribute("appServer","http://"+request.getLocalAddr()+":"+request.getLocalPort()+request.getContextPath());
         return "views/"+path;
     }

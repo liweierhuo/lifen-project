@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 /**
@@ -73,9 +74,11 @@ public class UcUsersController {
     }
 
     @PostMapping("do_login")
-    public ResultMap doLogin(String account, String password,String userType){
+    public ResultMap doLogin(String account, String password,String userType,HttpServletRequest request){
         UcUsers ucUser = ucUsersService.login(account,password,userType);
         if (ucUser != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("ucUser",ucUser);
             return ResultMap.ok("操作成功").put("user", ucUser);
         } else {
             return ResultMap.error();
