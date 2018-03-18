@@ -25,7 +25,7 @@ public interface UcUsersService {
 
     void delete(Long userId);
     UcUsers update(UcUsers ucUsers) throws Exception;
-    UcUsers findByUserAccount(String userAccount);
+    UcUsers findByUserAccountOrUserId(String userAccount,Long userId);
 
     Page<UcUsers> getUserList(PageRequest pageRequest,UcUsers user);
 }

@@ -2,7 +2,7 @@ $(function() {
 	//渲染表格
 	layui.table.render({
 		elem : '#table',
-		url : appServer+'uc/get_teacherList.json',
+		url : appServer+'admin/get_teacherList.json',
  		where: {
 	  		token : getToken()
 		},

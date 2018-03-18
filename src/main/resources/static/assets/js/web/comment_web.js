@@ -7,9 +7,22 @@ function load(path) {
     activeNav(path)
 }
 
+function loadAndParameter(path,parameter) {
+    location.replace(appServer+path+".html?"+parameter);
+    activeNav(path)
+}
+
 //设置选中导航栏
 function activeNav(path_name){
     $(".layui-container ul.layui-nav li.layui-nav-item").removeClass("layui-this");
     var $a = $(".layui-container ul.layui-nav>li.layui-nav-item>a[href='javascript:load("+path_name+")']");
     $a.addClass("layui-this");
+}
+
+//搜索
+function doPojectListSearch(){
+    $("#project_list_search").submit()
+/*    var userAccount = $("#userAccount").val().split(" - ");
+    var projectName = $("#projectName").val();
+    loadAndParameter("project/project_list","userAccount="+userAccount+"&projectName="+projectName);*/
 }

@@ -2,20 +2,19 @@ $(function() {
 	//渲染表格
 	layui.table.render({
 		elem : '#table',
-		url : appServer+'admin/get_studentList.json',
+		url : appServer+'admin/project_list.json',
  		where: {
 	  		token : getToken()
 		},
 		page: true,
 		cols: [[
 			{type:'numbers'},
-			{field:'userAccount', sort: true, title: '用户账号'},
-			{field:'userName', sort: true, title: '用户姓名'},
-			{field:'userType', sort: true, templet:function(d){ return d.userType == '1'?'教师':'学生'; }, title: '用户类型'},
-			{field:'mobile', sort: true, title: '手机号'},
-			{field:'email', sort: true, title: '邮箱'},
-			{field:'gender', sort: true, title: '性别'},
-			{field:'loginNum', sort: true, title: '登录次数'},
+			{field:'projectCode', sort: true, title: '项目编号'},
+            {field:'projectName', sort: true, title: '项目名称'},
+			{field:'projectType', sort: true, templet:function(d){ return d.projectType == '0'?'创业项目':d.projectType == '1'? '创新项目':"其他"; }, title: '类型'},
+			{field:'projectStatus', sort: true, templet:function(d){ return d.projectStatus == 'draft'?'草稿':d.projectStatus == 'normal'? '正常':"结束"; }, title: '状态'},
+			{field:'userAccount', sort: true, title: '发布者'},
+			{field:'projectContent', sort: true, title: '内容'},
 			{field:'createTime', sort: true, templet:function(d)
 			{ return layui.util.toDateString(d.createTime); }, title: '创建时间'},
             {align:'center',width:'20%', toolbar: '#barTpl', title: '操作'}
@@ -76,7 +75,6 @@ $(function() {
             $("#editForm input[name=userAccount]").val(data.userAccount);
             $("#editForm input[name=userName]").val(data.userName);
             $("#editForm input[name=userType]").val(data.userType);
-            $("#editForm input[name=userType]").val(data.userType);
             $("#editForm").attr("method","PUT");
             selectItem = data.roleId;
             if('男'==data.sex){
@@ -104,6 +102,7 @@ $(function() {
 	$("#searchBtn").click(function(){
 		doSearch();
 	});
+
 
     //工具条点击事件
     layui.table.on('tool(table)', function(obj){

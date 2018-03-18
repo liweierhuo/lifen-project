@@ -122,7 +122,9 @@
             $.post(appServer + "uc/add_user", obj.field, function (data) {
                 if (data.code == 200) {
                     layer.msg(data.msg, {icon: 1});
-                    location.replace(appServer+"login.html");
+                    setTimeout(function() {
+                        location.replace(appServer+"login.html");
+                    }, 2000);
                 } else {
                     layer.closeAll('loading');
                     layer.msg(data.msg, {icon: 2});

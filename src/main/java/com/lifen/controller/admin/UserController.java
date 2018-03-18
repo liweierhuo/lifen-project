@@ -1,5 +1,6 @@
 package com.lifen.controller.admin;
 
+import com.lifen.constant.ProjectConstant;
 import com.lifen.dataobject.AdminUsers;
 import com.lifen.service.AdminUserService;
 import com.lifen.utils.ResultMap;
@@ -27,11 +28,12 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("admin/do_login")
-    public ResultMap doLogin(String account, String password) {
+    public ResultMap doLogin(String account, String password,HttpServletRequest request) {
         AdminUsers loginUser = adminUserService.login(account, password);
         if (loginUser == null) {
             return ResultMap.error("登录失败");
         }
+        request.getSession().setAttribute(ProjectConstant.ADMIN_USER_SESSION_KEY,loginUser);
         return ResultMap.ok("登录成功").put("user", loginUser);
     }
 
@@ -47,6 +49,7 @@ public class UserController {
     @RequestMapping(value= "admin/login_out", method = RequestMethod.GET)
     public String loginOut(HttpServletRequest request) {
         log.info("退出系统");
+        request.getSession().removeAttribute(ProjectConstant.ADMIN_USER_SESSION_KEY);
         return "views/admin/login";
     }
 

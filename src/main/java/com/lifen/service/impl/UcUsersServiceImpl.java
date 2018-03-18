@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.Transient;
@@ -67,13 +68,21 @@ public class UcUsersServiceImpl implements UcUsersService {
     }
 
     @Override
-    public UcUsers findByUserAccount(String userAccount) {
-        return ucUsersRepository.findAllByUserAccount(userAccount);
+    public UcUsers findByUserAccountOrUserId(String userAccount,Long userId) {
+        if (StringUtils.isEmpty(userAccount) && userId == null) {
+            log.error("userAccount and userId need have one");
+            return null;
+        }
+        if (!StringUtils.isEmpty(userAccount)) {
+            return ucUsersRepository.findAllByUserAccount(userAccount);
+        } else {
+            return ucUsersRepository.findOne(userId);
+        }
     }
 
     @Override
     public Page<UcUsers> getUserList(PageRequest pageRequest, UcUsers ucUser) {
-        Pageable pageable = new PageRequest(pageRequest.getPageNumber(), pageRequest.getPageSize(), Sort.Direction.ASC, "userId");
+        Pageable pageable = new PageRequest(pageRequest.getPageNumber(), pageRequest.getPageSize(), Sort.Direction.DESC, "userId");
         Specification<UcUsers> userSpec = new Specification<UcUsers>() {
             @Override
             public Predicate toPredicate(Root<UcUsers> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {

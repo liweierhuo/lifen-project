@@ -15,103 +15,118 @@
 <div id="container">
     <div class="fly-panel fly-column">
         <div class="layui-container">
+            <div class="layui-form toolbar">
+                <form id="project_list_search" th:action="@{../project/project_list.html}" method="post">
+                    会员账号：
+                    <input id="userAccount" name="userAccount" th:value="${taProject.userAccount}" class="layui-input search-input" type="text" placeholder="请输入账号"/>&emsp;
+                    项目名称：
+                    <input id="projectName" name="projectName" th:value="${taProject.projectName}" class="layui-input search-input" type="text" placeholder="请输入项目名称"/>&emsp;
+
+                    <div class="layui-form-item proSelect">
+                        <label class="layui-form-label">项目类型：</label>
+                        <div class="layui-input-block editWidth">
+                            <select id="projectType" name="projectType">
+                                <option value="">=请选择=</option>
+                                <option th:each="projectType : ${projectTypeMap}" th:value="${projectType.key}"
+                                        th:selected="${projectType.key eq taProject.projectType}"
+                                        th:text="${projectType.value}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!--<div class="layui-input-block">
+                        <select id="projectType" name="projectType">
+                            <option value="">=请选择=</option>
+                            <option th:each="projectType : ${projectTypeMap}" th:value="${projectType.key}"
+                                    th:selected="${projectType.key eq taProject.projectType}"
+                                    th:text="${projectType.value}"></option>
+                        </select>
+
+                        <div class="layui-unselect layui-form-select">
+                            <div class="layui-select-title">
+                                <input type="text" placeholder="请选择" value="请选择" readonly=""
+                                       class="layui-input layui-unselect"/>
+                                <i class="layui-edge"></i></div>
+                            <dl class="layui-anim layui-anim-upbit" style="">
+                                <dd lay-value="" class="layui-select-tips">请选择</dd>
+                                <dd th:attr="lay-value=${projectType.key}"
+                                    th:class="${projectType.key eq taProject.projectType}? 'layui-this':''"
+                                    th:each="projectType : ${projectTypeMap}" th:text="${projectType.value}">创业项目
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>-->
+                    <button id="searchBtn" class="layui-btn search-btn">
+                        <i class="layui-icon">&#xe615;</i>搜索
+                    </button>
+                </form>
+            </div>
             <div class="fly-column-right layui-hide-xs">
-                <a href="javascript:load('add_project');" class="layui-btn layui-btn-normal" data-pjax="">写点什么</a>
+                <a href="javascript:load('project/add_project');" class="layui-btn layui-btn-normal" data-pjax="">发布项目</a>
             </div>
             <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
-                <a href="javascript:load('add_project');" class="layui-btn layui-btn-normal" data-pjax="">写点什么</a>
+                <a href="javascript:load('project/add_project');" class="layui-btn layui-btn-normal" data-pjax="">发布项目</a>
             </div>
         </div>
     </div>
     <div class="layui-container">
         <div class="layui-row layui-col-space15">
-            <div class="layui-col-md12">
-                <div id="guide">
-                    <div class="group">
-                        <ul>
-                            <li class="column">
-                                <a class="current">
-                                    <i class="fa fa-bookmark"></i> 不限类别 <i class="fa fa-caret-down arrow"></i>
-                                </a>
-                                <ul class="sub">
-                                    <li><a href="/index/news/index.html?time=&amp;cate=0&amp;type=" data-pjax="">不限类别</a></li>
-                                    <li><a href="/index/news/index.html?time=&amp;cate=1&amp;type=" data-pjax="">每周音乐专题</a></li>
-                                    <li><a href="/index/news/index.html?time=&amp;cate=2&amp;type=" data-pjax="">音乐资讯</a></li>
-                                    <li><a href="/index/news/index.html?time=&amp;cate=3&amp;type=" data-pjax="">音乐周边</a></li>
-                                    <li><a href="/index/news/index.html?time=&amp;cate=12&amp;type=" data-pjax="">成长记录</a></li>
-                                </ul>
-                            </li>
-                            <li class="sort">
-                                <a class="current">
-                                    <i class="fa fa-sort"></i>
-                                    最新发布
-                                    <i class="fa fa-caret-down arrow"></i>
-                                </a>
-                                <ul class="sub">
-                                    <li><a href="/index/news/index.html?time=&amp;cate=&amp;type=0" data-pjax="">最新发布</a></li>
-                                    <li><a href="/index/news/index.html?time=&amp;cate=&amp;type=coll" data-pjax="">喜欢最多</a></li>
-                                    <li><a href="/index/news/index.html?time=&amp;cate=&amp;type=see" data-pjax="">浏览最多</a></li>
-                                    <li><a href="/index/news/index.html?time=&amp;cate=&amp;type=com" data-pjax="">评论最多</a></li>
-                                </ul>
-                            </li>
-                            <li class="timeframe">
-                                <a class="current">
-                                    <i class="fa fa-clock-o"></i>
-                                    不限时间
-                                    <i class="fa fa-caret-down arrow"></i>
-                                </a>
-                                <ul class="sub">
-                                    <li><a href="/index/news/index.html?time=0&amp;cate=&amp;type=" data-pjax="">不限时间</a></li>
-                                    <li><a href="/index/news/index.html?time=week&amp;cate=&amp;type=" data-pjax="">一周内</a></li>
-                                    <li><a href="/index/news/index.html?time=month&amp;cate=&amp;type=" data-pjax="">一月内</a></li>
-                                    <li><a href="/index/news/index.html?time=year&amp;cate=&amp;type=" data-pjax="">一年内</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
             <div class="layui-col-md8">
                 <div class="category centralnav">
                     <div class="primary list">
                         <div class="article" role="main">
                             <ul>
-                                <li id="post-15604" class="group">
+
+
+                                <li id="post-15604" class="group" th:each="project : ${projectList.data}">
                                     <div class="item">
                                         <div class="thumb">
-                                            <a href="/index/news/show/id/11.html" title="Animals-【Martin Garrix 】1080p" data-pjax="">
-                                                <img alt="Animals-【Martin Garrix 】1080p" th:src="@{/assets/images/no-img.jpg}"/>
+                                            <a href="javascript:void(0);" th:onclick="|load('project/project_detail/${project.projectCode}');|" th:title="${project.projectName}">
+                                                <img th:src="@{/assets/images/no-img.jpg}"/>
                                             </a>
                                         </div>
                                         <div class="item-main">
                                             <div class="title">
-                                                <h2><a href="/index/news/show/id/11.html" title="Animals-【Martin Garrix 】1080p" data-pjax="">Animals-【Martin Garrix 】1080p</a></h2>
+                                                <h2>
+                                                    <a href="javascript:void(0);" th:onclick="|load('project/project_detail/${project.projectCode}');|" th:title="${project.projectName}"
+                                                       th:text="${#strings.abbreviate(project.projectName,50)}">
+                                                        默认项目名称
+                                                    </a>
+                                                </h2>
                                             </div>
                                             <div class="meta">
                                                 <div class="cat">
-                                                    <a href="/index/news/index/cate/2.html" rel="category tag" data-pjax="">音乐资讯</a>
-                                                    <span class="tag-links">
+                                                    <a href="javascript:void(0);" th:text="${projectTypeMap[__${project.projectType}__]}">创业项目</a>
+                                                    <!--<span class="tag-links">
                                                     <i>
                                                         <a href="/index/news/index/keywords/Animals.html" rel="tag" data-pjax="">Animals</a>
                                                          - <a href="/index/news/index/keywords/Garrix.html" rel="tag" data-pjax="">Garrix</a>
                                                          - <a href="/index/news/index/keywords/Martin.html" rel="tag" data-pjax="">Martin</a>
                                                          - <a href="/index/news/index/keywords/1080p.html" rel="tag" data-pjax="">1080p</a>
-                                                                                                            </i>
-                                                </span>
+                                                    </i>
+                                                    </span>-->
                                                 </div>
-                                                <div class="excerpt">
-                                                    Animals-【Martin Garrix 】1080p                                                </div>
+                                                <div class="excerpt" th:text="${#strings.abbreviate(project.projectContent,50)}">
+                                                    内容
+                                                </div>
                                                 <div class="data">
                                                     <time class="time">
-                                                        <i class="fa fa-calendar"></i> 管理员 发布于
-                                                        2018-03-12 12:12                                                    </time>
-                                                    <span class="heart-num"><i class="fa fa-heart"></i>0</span>
-                                                    <span><i class="fa fa-fire"></i>15</span>
-                                                    <span class="comment-num"><a href="/index/news/show/id/11.html#comments" class="comments-link" data-pjax=""><i class="fa fa-comment"></i>0</a></span>
+                                                        <i class="fa fa-calendar"></i>
+                                                        <span th:text="${project.userAccount}">管理员</span>
+                                                        发布于
+                                                        <span th:text="${#strings.substring(project.createTime,0,16)}">2018-03-12 12:12 </span>
+                                                                                                           </time>
+                                                   <span class="heart-num" th:text="${project.userAccount}">管理员</span>
+                                                    <!-- <span><i class="fa fa-fire"></i>15</span>
+                                                    <span class="comment-num">
+                                                        <a href="/index/news/show/id/11.html#comments" class="comments-link">
+                                                            <i class="fa fa-comment"></i>0</a>
+                                                    </span>-->
                                                 </div>
                                                 <div class="author">
-                                                    <a target="_blank" href="/index/user/index/id/1.html" title="管理员" data-pjax="" rel="author">
-                                                        <img th:src="@{/assets/images/head.jpg}" class="avatar" alt="" width="40" height="40"/>
+                                                    <a target="_blank" th:title="${project.userAccount}" th:onclick="|load('uc/getUserByUserAccountOrUserId','userAccount=${project.userAccount}');|">
+                                                        <img th:src="@{/assets/images/head.jpg}" class="avatar" width="40" height="40"/>
                                                     </a>
                                                 </div>
                                             </div>
@@ -122,9 +137,10 @@
                             </ul>
                         </div>
                     </div>
-
-                    <div class="text-center pagePjax">
+                    <div id="pages" style="text-align: center;">
                     </div>
+                    <input type="hidden" th:value="${projectList.count}" id="pageTotal"/> <!-- 总条数 -->
+                    <input type="hidden" th:value="${projectList.currentPage}" id="page"/>　　<!-- 第几页 -->
                 </div>
             </div>
 
@@ -135,51 +151,15 @@
                     <div class="layui-card-body">
                         <ul class="fly-list-static">
                             <li>
-                                <a href="/index/news/show/id/10.html" data-pjax="">连接世界，链接你我</a>
-                                <!--<a href="" class="pull-right"><span class="pull-right" style="color: #ccc"><i class="fa fa-comment"></i> 0</span></a>-->
+                                <a href="#" data-pjax="">创新创业我们可以的</a>
                             </li>
                         </ul>
                     </div>
                 </div>
-
-                <div class="layui-card fly-list-one">
-                    <div class="layui-card-header">往期精彩回顾</div>
-                    <div class="layui-card-body">
-                        <ul class="fly-list-static">
-                            <li>
-                                <a href="/index/news/show/id/1.html" data-pjax="">第一期音乐专题：车载CD热门精选</a>
-                                <!--<a href="" class="pull-right"><span class="pull-right" style="color: #ccc"><i class="fa fa-comment"></i> 3</span></a>-->
-                            </li>
-                            <li>
-                                <a href="/index/news/show/id/5.html" data-pjax="">2017全球百大DJ排行榜 | Top 100 DJs 2017</a>
-                                <!--<a href="" class="pull-right"><span class="pull-right" style="color: #ccc"><i class="fa fa-comment"></i> 0</span></a>-->
-                            </li>
-                            <li>
-                                <a href="/index/news/show/id/9.html" data-pjax="">Pro Tools 2018！音乐制作快人一步！</a>
-                                <!--<a href="" class="pull-right"><span class="pull-right" style="color: #ccc"><i class="fa fa-comment"></i> 0</span></a>-->
-                            </li>
-                            <li>
-                                <a href="/index/news/show/id/7.html" data-pjax="">novation Launchpad演奏（M4SONIC - Octane）</a>
-                                <!--<a href="" class="pull-right"><span class="pull-right" style="color: #ccc"><i class="fa fa-comment"></i> 1</span></a>-->
-                            </li>
-                            <li>
-                                <a href="/index/news/show/id/8.html" data-pjax="">一城、一歌｜你心底的乡愁被哪首牵动奏响？</a>
-                                <!--<a href="" class="pull-right"><span class="pull-right" style="color: #ccc"><i class="fa fa-comment"></i> 0</span></a>-->
-                            </li>
-                            <li>
-                                <a href="/index/news/show/id/6.html" data-pjax="">Teenage Engineering 与宜家家具合作推出多款创意性音乐设备</a>
-                                <!--<a href="" class="pull-right"><span class="pull-right" style="color: #ccc"><i class="fa fa-comment"></i> 0</span></a>-->
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
                 <div class="layui-card">
                     <div class="layui-card-header">友情链接</div>
                     <div class="layui-card-body">
-                        <a href="javascript:;" onclick="layer.tips('虚席以待.', this, {tips:1})" target="_blank" class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;">虚席以待</a>
-                        <a href="javascript:;" onclick="layer.tips('虚席以待.', this, {tips:1})" target="_blank" class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;">虚席以待</a>
-                        <a href="javascript:;" onclick="layer.tips('虚席以待.', this, {tips:1})" target="_blank" class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;">虚席以待</a>
+                        <a href="#" class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;">虚席以待</a>
                     </div>
                 </div>
 
@@ -196,6 +176,31 @@
         if(getCurrentUser()==null){
             location.replace(appServer+"login.html");
         }
+
+        //搜索按钮点击事件
+        $("#searchBtn").click(function(){
+            doPojectListSearch();
+        });
+    });
+    layui.use('laypage', function(){
+        var laypage = layui.laypage;
+        var pageTotal = $("#pageTotal").val();
+        var page = $("#page").val();
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'pages' //注意，这里的 test1 是 ID，不用加 # 号
+            ,count: pageTotal //数据总数，从服务端得到
+            ,curr: page
+            ,jump: function(obj, first){
+                //obj包含了当前分页的所有参数，比如：
+                //首次不执行
+                if(!first){
+                    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                    console.log(obj.limit); //得到每页显示的条数
+                    loadAndParameter('project/project_list.html','page='+obj.curr)
+                }
+            }
+        });
     });
 </script>
 </body>

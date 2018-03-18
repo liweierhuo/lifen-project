@@ -16,6 +16,4 @@ spring:
 server:
   context-path: /lifen
   port: 8001
-projectUrl:
-  loginUrl: /home/index
 

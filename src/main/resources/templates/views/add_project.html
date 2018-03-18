@@ -55,7 +55,8 @@
                                     <div class="layui-form-item">
                                         <label class="layui-form-label"></label>
                                         <div class="layui-input-inline">
-                                            <input type="hidden" name="id" value=""/>
+                                            <input type="hidden" name="userId" th:value="${session.ucUser.userId}"/>
+                                            <input type="hidden" name="userAccount" th:value="${session.ucUser.userAccount}"/>
                                             <button class="layui-btn" lay-filter="add_project" lay-submit="">立即发布</button>
                                         </div>
                                     </div>
@@ -88,7 +89,9 @@
                 $.post(appServer + "project/add_project", obj.field, function (data) {
                     if (data.code == 200) {
                         layer.msg(data.msg, {icon: 1});
-                        location.replace(appServer+"login.html");
+                        setTimeout(function() {
+                            location.replace(appServer+"project/project_list.html");
+                        }, 2000);
                     } else {
                         layer.closeAll('loading');
                         layer.msg(data.msg, {icon: 2});

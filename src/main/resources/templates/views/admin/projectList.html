@@ -1,0 +1,96 @@
+<div class="content-header">
+	<h2 class="content-title">项目列表</h2>
+	<span class="layui-breadcrumb">
+	  <a href="#!home">首页</a>
+	  <a><cite>项目列表</cite></a>
+	</span>
+</div>
+
+<div>
+	<div class="layui-form toolbar">
+		账号：<input id="searchAccount" class="layui-input search-input" type="text" placeholder="请输入账号" />&emsp;
+		日期：<input id="searchDate" class="layui-input search-input date-icon" type="text" placeholder="请选择日期范围" style="width: 175px;" />&emsp;
+		<button id="searchBtn" class="layui-btn search-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+		<button id="addBtn" class="layui-btn search-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+	</div>
+	<!-- 数据表格 -->
+	<table class="layui-table" id="table" lay-filter="table"></table>
+	<script type="text/javascript" src="../../../static/assets/js/system/projectList.js" th:src="@{/assets/js/system/projectList.js}"></script>
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="addModel">
+	<form id="editForm" class="layui-form model-form" action="">
+		<input name="userId" type="hidden" />
+		<div class="layui-form-item">
+			<label class="layui-form-label">账号</label>
+			<div class="layui-input-block">
+				<input name="userAccount" placeholder="请输入账号" type="text" class="layui-input" maxlength="20" lay-verify="required" required="required" />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">姓名</label>
+			<div class="layui-input-block">
+				<input name="userName" placeholder="请输入姓名" type="text" class="layui-input" maxlength="20" lay-verify="required" required="required" />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密码</label>
+			<div class="layui-input-block">
+				<input name="userPwd" placeholder="请输入密码" type="password" class="layui-input" lay-verify="required" required="required"  />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">确认密码</label>
+			<div class="layui-input-block">
+				<input name="confirmUserPwd" placeholder="请输入确认密码" type="password" class="layui-input" lay-verify="required" required="required"  />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">性别</label>
+			<div class="layui-input-block">
+				<input type="radio" name="gender" id="genderMan" value="男" title="男" checked="checked" />
+				<input type="radio" name="gender" id="genderWoman" value="女" title="女" />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户类型</label>
+			<div class="layui-input-block">
+				<select id="userType-select" name="userType" lay-verify="required">
+					<option value="">-请选择-</option>
+					<option value="1" selected="selected">教师</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">教师职称</label>
+			<div class="layui-input-block">
+				<input name="userTitle" placeholder="请输入教师职称" type="text" class="layui-input" maxlength="20" lay-verify="required" required="required" />
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">手机号</label>
+			<div class="layui-input-block">
+				<input name="mobile" placeholder="请输入手机号" type="text" class="layui-input" maxlength="20" />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱</label>
+			<div class="layui-input-block">
+				<input name="email" placeholder="请输入邮箱" type="text" class="layui-input" maxlength="20" />
+			</div>
+		</div>
+		<div class="layui-form-item model-form-footer">
+			<button class="layui-btn layui-btn-primary" type="button" id="btnCancel">取消</button>
+			<button class="layui-btn" lay-filter="btnSubmit" lay-submit="true">保存</button>
+		</div>
+	</form>
+</script>
+<!-- 表格操作列 -->
+<script type="text/html" id="barTpl">
+	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	<a class="layui-btn layui-btn-xs" lay-event="reset">重置密码</a>
+</script>
+

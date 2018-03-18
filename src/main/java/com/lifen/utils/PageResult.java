@@ -14,12 +14,31 @@ public class PageResult<T> {
 	private int code; //状态码, 0表示成功
 	
 	private String msg;  //提示信息
+	private Integer currentPage ;  //当前页
+	private Integer pages ;  //总页数
 
 	private long count; // 总数量, bootstrapTable是total
 
 	private List<T> data; // 当前数据, bootstrapTable是rows
 
 	public PageResult() {
+	}
+
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public Integer getPages() {
+		return pages;
+	}
+
+	public void setPages(Integer pages) {
+		this.pages = pages;
 	}
 
 	public PageResult(long total, List<T> rows) {

@@ -1,7 +1,7 @@
 package com.lifen.config;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,9 +9,7 @@ import org.springframework.stereotype.Component;
  * 2017-07-30 11:43
  */
 @Data
-@ConfigurationProperties(prefix = "server")
 @Component
 public class ProjectConfig {
-
 
 }
