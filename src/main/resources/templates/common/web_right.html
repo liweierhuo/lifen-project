@@ -1,7 +1,9 @@
 <div id="web_rigth_href">
     <div class="layui-card-header">常用链接</div>
     <div class="layui-card-body">
-        <a th:href="@{'../project/project_list.html?userAccount='+${session.ucUser.userAccount}}" class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;">我的项目</a>
-        <a th:href="@{'../task/task_list.html?userAccount='+${session.ucUser.userAccount}}" class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;">我的任务</a>
+        <a th:href="@{'../project/project_list.html?userAccount='+${session.ucUser.userAccount}}"
+           class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;" th:if="${session.ucUser.userType eq '1'}">我的项目</a>
+        <a th:href="@{'../task/task_list.html?userAccount='+${session.ucUser.userAccount}}"
+           class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;" th:if="${session.ucUser.userType eq '2'}">我的任务</a>
     </div>
 </div>

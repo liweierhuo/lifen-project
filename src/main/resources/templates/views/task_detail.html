@@ -23,6 +23,7 @@
                     <header class="single-header">
                         <div class="single-meta">
                             <input type="hidden" name="taskIdInpt" th:value="${taskBo.taskId}" id="taskIdInpt"/>
+                            <input type="hidden" name="projectCode" th:value="${project.projectCode}" id="projectCode"/>
                             <div class="author-avatar">
                                 <a href="#" rel="author">
                                     <img th:src="@{/assets/images/head.jpg}" class="avatar"
@@ -78,6 +79,17 @@
                             <div class="loading-line"></div>
                         </div>
                     </div>
+
+                    <div th:if="${taskBo.projectPublisher eq session.ucUser.userAccount}" class="single-footer">
+                        <div class="single-heart">
+                            <a href="#" class="user-signin" th:onclick="|delTaskById('${taskBo.taskId}');|">
+                                <i class="fa fa-heart"></i>
+                                <span class="heart-text">删除</span>
+                            </a>
+                            <div class="loading-line"></div>
+                        </div>
+                    </div>
+
                 </article>
             </div>
 
@@ -164,6 +176,25 @@
         var selectItem = "";
         $("#btnCancel").click(function(){
             layer.closeAll('page');
+        });
+    }
+
+    function delTaskById(taskId) {
+        var projectCode = $("#projectCode").val();
+        layer.alert('',{
+            icon:2,title:'删除确认',content:'您确定要删除这条记录吗？',closeBtn:1},function(){
+            $.post(appServer + "task/deleteById.json", {delTaskId:taskId}, function (data) {
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    setTimeout(function() {
+                        location.replace(appServer+"project/project_detail/"+projectCode+".html");
+                    }, 2000);
+                } else {
+                    layer.closeAll('loading');
+                    layer.msg(data.msg, {icon: 2});
+                    return false;
+                }
+            }, "json");
         });
     }
 </script>

@@ -40,12 +40,12 @@ public class TaProjectServiceImpl implements TaProjectService {
     }
 
     @Override
-    public boolean LogicDelete(Long taProjectId) {
+    public boolean logicDelete(Long taProjectId) {
         Assert.isNull(taProjectId,"删除操作id不能为空");
         TaProject taProject = taProjectRepository.findOne(taProjectId);
         taProject.setIsDeleted(IsDeletedEnum.YES.getCode());
         taProjectRepository.save(taProject);
-        return false;
+        return true;
     }
 
     @Override

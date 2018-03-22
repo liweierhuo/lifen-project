@@ -10,6 +10,8 @@ public interface TcTaskService {
 
     void delete(Long taskId);
 
+    boolean logicDelete(Long taskId);
+
     Page<TcTask> findByProjectId(Long projectId,PageRequest pageRequest);
 
     TcTask findById(Long taskId);

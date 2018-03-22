@@ -8,7 +8,7 @@ public interface TaProjectService {
 
     TaProject save(TaProject taProject);
     void delete(Long taProjectId);
-    boolean LogicDelete(Long taProjectId);
+    boolean logicDelete(Long taProjectId);
     TaProject update(TaProject taProject);
 
     TaProject findByProjectCode(String projectCode);

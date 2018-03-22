@@ -13,9 +13,9 @@
             <li class="layui-nav-item">
                 <a href="javascript:load('project/project_list');" data-pjax="">项目中心</a>
             </li>
-            <li class="layui-nav-item">
+           <!-- <li class="layui-nav-item">
                 <a href="javascript:load('hot_project_list');" data-pjax="">热门项目</a>
-            </li>
+            </li>-->
             <span class="layui-nav-bar" style="left: 56.5px; top: 55px; width: 0px; opacity: 0;">
 
             </span>
@@ -45,6 +45,36 @@
     <script>
         $(function() {
             initUserInfo();  //获取用户信息
+
+            //修改密码表单提交事件
+            layui.form.on('submit(pswSubmit)', function(data){
+                data.field._method = $("#pswForm").attr("method");
+                layer.load(1);
+                $.post(appServer+"/uc/modifyUserPwd.json", data.field, function(data){
+                    if(data.code==200){
+                        layer.msg(data.msg,{icon: 1});
+                        setTimeout(function() {
+                            loginOut();
+                        }, 1500);
+                    }else{
+                        layer.closeAll('loading');
+                        layer.msg(data.msg,{icon: 2});
+                    }
+                }, "JSON");
+                return false;
+            });
+            layui.form.verify({
+                psw2: function(value, item){
+                    var newPsw1 = $("#pswForm input[name=newPsw]").val();
+                    if(value!=newPsw1){
+                        return '两次输入密码不一致';
+                    }
+                },
+                pass: [
+                    /^[\S]{6,12}$/
+                    ,'密码必须6到12位，且不能出现空格'
+                ]
+            });
         });
 
         //获取用户信息
@@ -85,5 +115,48 @@
 
             //…
         });
+
+        //显示表单弹窗
+        function modifyUserPwd(){
+            layer.open({
+                type: 1,
+                title: "修改密码",
+                area: '400px',
+                offset: '120px',
+                content: $("#pswModel").html()
+            });
+            $("#pswForm")[0].reset();
+            $("#pswCancel").click(function(){
+                layer.closeAll('page');
+            });
+        }
+    </script>
+
+    <!-- 修改密码弹窗 -->
+    <script type="text/html" id="pswModel">
+        <form id="pswForm" class="layui-form model-form" action="" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">旧密码</label>
+                <div class="layui-input-block">
+                    <input name="oldPsw" placeholder="请输入旧密码" type="password" class="layui-input" maxlength="12" lay-verify="required|pass" required ="true"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-block">
+                    <input name="newPsw" placeholder="请输入新密码" type="password" class="layui-input" maxlength="12" lay-verify="required|pass" required ="true" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-block">
+                    <input name="newPsw2" placeholder="请再次输入新密码" type="password" class="layui-input" maxlength="12" lay-verify="required|psw2" required ="true" />
+                </div>
+            </div>
+            <div class="layui-form-item model-form-footer">
+                <button class="layui-btn layui-btn-primary" type="button" id="pswCancel">取消</button>
+                <button class="layui-btn" lay-filter="pswSubmit" lay-submit="true">修改</button>
+            </div>
+        </form>
     </script>
 </div>

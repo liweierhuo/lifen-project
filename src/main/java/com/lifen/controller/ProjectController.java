@@ -90,7 +90,10 @@ public class ProjectController {
         }
         TaProject project = taProjectService.findByProjectCode(projectCode);
         PageRequest pageRequest = new PageRequest(0,10);
-        Page<TcTask> taskResult = tcTaskService.findByProjectId(project.getProjectId(),pageRequest);
+        TcTask tcTaskQuery = new TcTask();
+        tcTaskQuery.setProjectId(project.getProjectId());
+        tcTaskQuery.setIsDeleted(IsDeletedEnum.NO.getCode());
+        Page<TcTask> taskResult = tcTaskService.getTaskList(pageRequest,tcTaskQuery);
         ProjectBo projectBo = new ProjectBo();
         BeanUtils.copyProperties(project,projectBo);
         projectBo.setTaskPage(taskResult);

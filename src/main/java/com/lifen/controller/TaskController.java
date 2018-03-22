@@ -1,8 +1,10 @@
 package com.lifen.controller;
 
+import com.lifen.constant.ProjectConstant;
 import com.lifen.dataobject.TaProject;
 import com.lifen.dataobject.TcScore;
 import com.lifen.dataobject.TcTask;
+import com.lifen.dataobject.UcUsers;
 import com.lifen.dto.TaskBo;
 import com.lifen.enums.IsDeletedEnum;
 import com.lifen.enums.ProjectStatusEnum;
@@ -38,7 +40,7 @@ public class TaskController {
     private TcScoreService tcScoreService;
 
     @RequestMapping("task/task_list")
-    public String getProjectList(@RequestParam(value = "page",required = false) Integer page,
+    public String getList(@RequestParam(value = "page",required = false) Integer page,
                                  @RequestParam(value = "limit",required = false) Integer limit, Model model,
                                  @ModelAttribute("tcTask") TcTask tcTask, HttpServletRequest request){
         if (page == null) {
@@ -49,6 +51,12 @@ public class TaskController {
         }
         if (tcTask == null) {
             tcTask = new TcTask();
+        }
+        if (request != null && request.getSession()!= null) {
+            UcUsers ucUser = (UcUsers)request.getSession().getAttribute(ProjectConstant.UC_USER_SESSION_KEY);
+            if (ucUser != null) {
+                tcTask.setUserAccount(ucUser.getUserAccount());
+            }
         }
         PageRequest pageRequest = new PageRequest(page - 1,limit);
         tcTask.setIsDeleted(IsDeletedEnum.NO.getCode());
@@ -64,7 +72,7 @@ public class TaskController {
 
     @ResponseBody
     @GetMapping("admin/task_list")
-    public PageResult<TcTask> getProjectListJson(@RequestParam(value = "page",required = false) Integer page,
+    public PageResult<TcTask> getListJson(@RequestParam(value = "page",required = false) Integer page,
                                  @RequestParam(value = "limit",required = false) Integer limit, Model model,
                                  @RequestParam(value = "tcTask",required = false) TcTask tcTask){
         if (page == null) {
@@ -85,7 +93,7 @@ public class TaskController {
     }
 
     @GetMapping("task/task_detail/{taskId}")
-    public String getTeacherList(@PathVariable("taskId") Long taskId,Model model){
+    public String getDetail(@PathVariable("taskId") Long taskId,Model model){
         if (taskId == null) {
             return "views/error";
         }
@@ -97,12 +105,15 @@ public class TaskController {
         taskBo.setProjectPublisher(project.getUserAccount());
         taskBo.setTcScore(scoreResult);
         model.addAttribute("taskBo",taskBo);
+        model.addAttribute("project",project);
         model.addAttribute("taskTypeMap",TaskTypeEnum.toMap());
         return "views/task_detail";
     }
 
+
+
     @GetMapping("task/add_task")
-    public String addProjectInit(Model model,@RequestParam(value = "projectCode",required = false) String projectCode){
+    public String addInit(Model model,@RequestParam(value = "projectCode",required = false) String projectCode){
         if (StringUtils.isEmpty(projectCode)) {
             return "error";
         }
@@ -118,7 +129,7 @@ public class TaskController {
 
     @ResponseBody
     @PostMapping("task/add_task")
-    public ResultMap addProject(TcTask tcTask){
+    public ResultMap addTask(TcTask tcTask){
         if (StringUtils.isEmpty(tcTask.getUserAccount())) {
             return ResultMap.error("用户账号不能为空");
         }
@@ -130,6 +141,39 @@ public class TaskController {
             return ResultMap.ok("操作成功，去看看吧");
         } else {
             return ResultMap.error();
+        }
+    }
+
+    @GetMapping("task/edit_task/{taskId}")
+    public String editInit(@PathVariable("taskId") Long taskId,Model model){
+        if (taskId == null) {
+            return "views/error";
+        }
+        TcTask tcTask = tcTaskService.findById(taskId);
+        TcScore scoreResult = tcScoreService.findByTaskId(tcTask.getTaskId());
+        TaProject project = taProjectService.findByProjectId(tcTask.getProjectId());
+        TaskBo taskBo = new TaskBo();
+        BeanUtils.copyProperties(tcTask, taskBo);
+        taskBo.setProjectPublisher(project.getUserAccount());
+        taskBo.setTcScore(scoreResult);
+        model.addAttribute("taskBo",taskBo);
+        model.addAttribute("project",project);
+        model.addAttribute("taskTypeMap",TaskTypeEnum.toMap());
+        return "views/edit_task";
+    }
+
+    @ResponseBody
+    @PostMapping("task/deleteById")
+    public ResultMap deleteTaskById(@RequestParam("delTaskId") Long taskId,HttpServletRequest request) {
+        try {
+            if (tcTaskService.logicDelete(taskId)) {
+                return ResultMap.ok("操作成功");
+            } else {
+                return ResultMap.error();
+            }
+        } catch (Exception e) {
+            log.error("task/deleteById is error {}",e.getMessage());
+            return ResultMap.error(e.getMessage());
         }
     }
 }

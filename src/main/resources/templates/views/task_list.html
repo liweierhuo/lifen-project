@@ -16,11 +16,8 @@
     <div class="fly-panel fly-column">
         <div class="layui-container">
             <div class="layui-form toolbar">
-                <form id="project_list_search" th:action="@{../task/task_list.html}" method="post">
-                    会员账号：
-                    <input id="userAccount" name="userAccount" th:value="${task.userAccount}"
-                           class="layui-input search-input" type="text" placeholder="请输入账号"/>&emsp;
-                    项目名称：
+                <form id="task_list_search" th:action="@{../task/task_list.html}" method="post">
+                    标题：
                     <input id="taskTitle" name="taskTitle" th:value="${task.taskTitle}" class="layui-input search-input"
                            type="text" placeholder="请输入标题"/>&emsp;
 
@@ -30,12 +27,6 @@
                     </button>
                 </form>
             </div>
-            <!--<div class="fly-column-right layui-hide-xs">
-                <a href="javascript:load('project/add_project');" class="layui-btn layui-btn-normal" data-pjax="">发布项目</a>
-            </div>
-            <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
-                <a href="javascript:load('project/add_project');" class="layui-btn layui-btn-normal" data-pjax="">发布项目</a>
-            </div>-->
         </div>
     </div>
     <div class="layui-container">
@@ -61,7 +52,7 @@
                                     </a>
                                 </td>
                                 <td style="max-width: 300px;" class="layui-elip">
-                                    <a href="#" th:title="${task.taskTitle}"
+                                    <a th:href="@{'../task/task_detail/'+${task.taskId}+'.html'}" th:title="${task.taskTitle}"
                                        th:text="${#strings.length(task.taskTitle) gt 15}? ${#strings.abbreviate(task.taskTitle,15)} : ${task.taskTitle}">
                                         标题
                                     </a>
@@ -71,8 +62,9 @@
                                 <td th:text="${#strings.length(task.taskContent) gt 25}? ${#strings.abbreviate(task.taskContent,25)} : ${task.taskContent}"
                                     th:title="${task.taskContent}">项目内容</td>
                                 <td>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-                                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                                    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit"
+                                       th:href="@{'../task/edit_task/'+${task.taskId}+'.html'}">编辑</a>
+                                    <a class="layui-btn layui-btn-danger layui-btn-xs" th:onclick="|delTaskById('${task.taskId}');|">删除</a>
                                 </td>
                             </tr>
 
@@ -108,6 +100,7 @@
 <div class="fly-footer" style="margin-bottom: 60px;" th:include="common/footer :: #web_footer"></div>
 
 
+
 <script>
     $(function () {
         if (getCurrentUser() == null) {
@@ -116,7 +109,7 @@
 
         //搜索按钮点击事件
         $("#searchBtn").click(function () {
-            doPojectListSearch();
+            $("#task_list_search").submit()
         });
     });
     layui.use('laypage', function () {
@@ -139,6 +132,23 @@
             }
         });
     });
+    function delTaskById(taskId) {
+        layer.alert('',{
+            icon:2,title:'删除确认',content:'您确定要删除这条记录吗？',closeBtn:1},function(){
+            $.post(appServer + "task/deleteById.json", {delTaskId:taskId}, function (data) {
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    setTimeout(function() {
+                        location.replace(appServer+"task/task_list.html");
+                    }, 2000);
+                } else {
+                    layer.closeAll('loading');
+                    layer.msg(data.msg, {icon: 2});
+                    return false;
+                }
+            }, "json");
+        });
+    }
 </script>
 </body>
 </html>

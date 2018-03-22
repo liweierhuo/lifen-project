@@ -62,12 +62,15 @@
                     </button>
                 </form>
             </div>
-            <div class="fly-column-right layui-hide-xs">
-                <a href="javascript:load('project/add_project');" class="layui-btn layui-btn-normal" data-pjax="">发布项目</a>
+            <div th:if="${session.ucUser.userType eq '1' }">
+                <div class="fly-column-right layui-hide-xs">
+                    <a href="javascript:load('project/add_project');" class="layui-btn layui-btn-normal" data-pjax="">发布项目</a>
+                </div>
+                <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
+                    <a href="javascript:load('project/add_project');" class="layui-btn layui-btn-normal" data-pjax="">发布项目</a>
+                </div>
             </div>
-            <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
-                <a href="javascript:load('project/add_project');" class="layui-btn layui-btn-normal" data-pjax="">发布项目</a>
-            </div>
+
         </div>
     </div>
     <div class="layui-container">

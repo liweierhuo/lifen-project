@@ -15,8 +15,10 @@
 <script>
     var appServer = "http://127.0.0.1:8001/lifen/";
     $(function () {
-        layer.msg("你已经超时退出登录",{icon: 2});
-        loginOut();
+        layer.msg("你已经退出登录",{icon: 2});
+        setTimeout(function() {
+            loginOut();
+        }, 2000);
     });
     //退出登录
     function loginOut(){

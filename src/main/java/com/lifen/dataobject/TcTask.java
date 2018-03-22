@@ -17,8 +17,8 @@ public class TcTask {
     @Id
     @GeneratedValue
     private Long taskId;
-    private long projectId;
-    private long userId;
+    private Long projectId;
+    private Long userId;
     private String userAccount;
     private String taskType;
     private String taskTitle;
@@ -38,19 +38,19 @@ public class TcTask {
         this.taskId = taskId;
     }
 
-    public long getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(long projectId) {
+    public void setProjectId(Long projectId) {
         this.projectId = projectId;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

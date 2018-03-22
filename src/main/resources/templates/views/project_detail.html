@@ -82,7 +82,8 @@
                             <p><span style="box-sizing: inherit; font-weight: bolder;"></span></p>
                             <p></p></div>
                     </div>
-                    <div class="single-footer">
+
+                    <div class="single-footer" th:if="${#bools.arrayAnd({project.userAccount ne session.ucUser.userAccount,session.ucUser.userType eq '2'})}">
                         <div class="single-heart">
                             <a href="javascript:addTask();" class="user-signin" id="setLove" data-id="9" data-mid="2">
                                 <i class="fa fa-heart"></i>
