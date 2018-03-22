@@ -22,7 +22,4 @@ function activeNav(path_name){
 //搜索
 function doPojectListSearch(){
     $("#project_list_search").submit()
-/*    var userAccount = $("#userAccount").val().split(" - ");
-    var projectName = $("#projectName").val();
-    loadAndParameter("project/project_list","userAccount="+userAccount+"&projectName="+projectName);*/
 }

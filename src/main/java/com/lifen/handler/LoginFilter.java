@@ -16,7 +16,7 @@ import java.io.IOException;
 @Component
 @WebFilter(urlPatterns = "/*",filterName = "loginFilter")
 public class LoginFilter implements Filter {
-    Logger logger = LoggerFactory.getLogger(MyInterceptor.class);
+    Logger logger = LoggerFactory.getLogger(LoginFilter.class);
     String nofilter="";
     public void destroy() {
         // TODO Auto-generated method stub

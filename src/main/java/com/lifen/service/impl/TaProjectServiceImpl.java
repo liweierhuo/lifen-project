@@ -1,6 +1,7 @@
 package com.lifen.service.impl;
 
 import com.lifen.dataobject.TaProject;
+import com.lifen.enums.IsDeletedEnum;
 import com.lifen.repository.TaProjectRepository;
 import com.lifen.service.TaProjectService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -38,8 +40,27 @@ public class TaProjectServiceImpl implements TaProjectService {
     }
 
     @Override
+    public boolean LogicDelete(Long taProjectId) {
+        Assert.isNull(taProjectId,"删除操作id不能为空");
+        TaProject taProject = taProjectRepository.findOne(taProjectId);
+        taProject.setIsDeleted(IsDeletedEnum.YES.getCode());
+        taProjectRepository.save(taProject);
+        return false;
+    }
+
+    @Override
+    public TaProject update(TaProject taProject) {
+        return taProjectRepository.save(taProject);
+    }
+
+    @Override
     public TaProject findByProjectCode(String projectCode) {
         return taProjectRepository.findByProjectCode(projectCode);
+    }
+
+    @Override
+    public TaProject findByProjectId(Long projectId) {
+        return taProjectRepository.findOne(projectId);
     }
 
     @Override

@@ -1,23 +1,18 @@
-package com.lifen.dataobject;
+package com.lifen.dto;
 
-import lombok.Data;
-import org.hibernate.annotations.DynamicUpdate;
+import com.lifen.dataobject.TcScore;
+import com.lifen.dataobject.TcTask;
+import org.springframework.data.domain.Page;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.util.Date;
 
 /**
- * Created by liwei on 2018/3/7.
+ * Created by liwei on 2018/3/21.
  */
-@Entity
-@DynamicUpdate
-public class TcTask {
-    @Id
-    @GeneratedValue
+public class TaskBo {
     private Long taskId;
     private long projectId;
+    private String projectPublisher;
     private long userId;
     private String userAccount;
     private String taskType;
@@ -26,9 +21,8 @@ public class TcTask {
     private Date createTime;
     private Date updateTime;
     private String isDeleted;
+    private TcScore tcScore;
 
-    public TcTask() {
-    }
 
     public Long getTaskId() {
         return taskId;
@@ -36,6 +30,14 @@ public class TcTask {
 
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public String getProjectPublisher() {
+        return projectPublisher;
+    }
+
+    public void setProjectPublisher(String projectPublisher) {
+        this.projectPublisher = projectPublisher;
     }
 
     public long getProjectId() {
@@ -108,5 +110,13 @@ public class TcTask {
 
     public void setIsDeleted(String isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public TcScore getTcScore() {
+        return tcScore;
+    }
+
+    public void setTcScore(TcScore tcScore) {
+        this.tcScore = tcScore;
     }
 }

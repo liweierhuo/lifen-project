@@ -22,7 +22,7 @@
                     项目名称：
                     <input id="projectName" name="projectName" th:value="${taProject.projectName}" class="layui-input search-input" type="text" placeholder="请输入项目名称"/>&emsp;
 
-                    <div class="layui-form-item proSelect">
+                    <!--<div class="layui-form-item proSelect">
                         <label class="layui-form-label">项目类型：</label>
                         <div class="layui-input-block editWidth">
                             <select id="projectType" name="projectType">
@@ -32,7 +32,7 @@
                                         th:text="${projectType.value}"></option>
                             </select>
                         </div>
-                    </div>
+                    </div>-->
 
 
                     <!--<div class="layui-input-block">
@@ -97,7 +97,7 @@
                                             </div>
                                             <div class="meta">
                                                 <div class="cat">
-                                                    <a href="javascript:void(0);" th:text="${projectTypeMap[__${project.projectType}__]}">创业项目</a>
+                                                    <a href="javascript:void(0);" th:text="${projectTypeMap.get(__${project.projectType}__)}">创业项目</a>
                                                     <!--<span class="tag-links">
                                                     <i>
                                                         <a href="/index/news/index/keywords/Animals.html" rel="tag" data-pjax="">Animals</a>
@@ -107,7 +107,7 @@
                                                     </i>
                                                     </span>-->
                                                 </div>
-                                                <div class="excerpt" th:text="${#strings.abbreviate(project.projectContent,50)}">
+                                                <div class="excerpt" th:text="${#strings.length(project.projectContent) gt 50}? ${#strings.abbreviate(project.projectContent,50)} : ${project.projectContent}">
                                                     内容
                                                 </div>
                                                 <div class="data">
@@ -156,12 +156,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="layui-card">
-                    <div class="layui-card-header">友情链接</div>
-                    <div class="layui-card-body">
-                        <a href="#" class="layui-btn layui-btn-normal" style="width: 100%;margin: 5px 0;">虚席以待</a>
-                    </div>
-                </div>
+                <div class="layui-card" th:include="common/web_right :: #web_rigth_href"></div>
 
             </div>
         </div>

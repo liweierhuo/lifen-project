@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>大学生创新创业成果</title>
+
+</head>
+
+<body class="layui-layout-body">
+<!-- 头部 -->
+<div th:include="common/header :: #web_header" class="fly-header bg-dark"></div>
+<div id="container">
+    <div class="fly-panel fly-column">
+
+    </div>
+    <div class="layui-container">
+        <div id="primary" class="primary" role="main">
+            <div class="area">
+                <article>
+                    <header class="single-header">
+                        <div class="single-meta">
+                            <input type="hidden" name="taskIdInpt" th:value="${taskBo.taskId}" id="taskIdInpt"/>
+                            <div class="author-avatar">
+                                <a href="#" rel="author">
+                                    <img th:src="@{/assets/images/head.jpg}" class="avatar"
+                                         width="70" height="70"/>
+                                </a>
+                            </div>
+                            <h1 class="title" th:text="${#strings.abbreviate(taskBo.taskTitle,50)}" th:title="${taskBo.taskTitle}">任务标题</h1>
+                            <p class="info">
+                            <span class="cat-links">
+                                任务类型：
+                                <a href="#" th:text="${taskTypeMap[__${taskBo.taskType}__]}">类型</a>
+                            </span>
+                            </p>
+                           <!-- <p class="copyright">
+                                <span>版权信息：</span>
+                                <a class="url" href="/index/user/index/id/1.html" rel="author" data-pjax="">管理员</a>
+                                原创作品、版权所有，禁止匿名转载，分享请注明版权。
+                            </p>-->
+                        </div>
+                        <div class="data-meta">
+                            <p>
+                            <span class="author">
+                                <a title=""
+                                   rel="author" th:text="${taskBo.userAccount}"></a>
+                                上传于 <time class="data-time" th:text="${#strings.substring(taskBo.createTime,0,10)}">2018-03-12</time>
+                            </span>
+                            </p>
+                        </div>
+                    </header>
+                    <div class="single-content-wrapper">
+                        <div class="single-content photos">
+                            <p class="ql-align-center"
+                               style="box-sizing: inherit; margin: 0px 1rem 1rem; text-align: center; color: rgb(41, 43, 44); font-family: -apple-system, system-ui, BlinkMacSystemFont,"
+                            th:text="${taskBo.taskTitle}">
+                                项目名称</p>
+                            <p style="box-sizing: inherit; margin: 0px 1rem 1rem; color: rgb(41, 43, 44);
+                            font-family: -apple-system, system-ui, BlinkMacSystemFont,"></p>
+                            <p style="box-sizing: inherit; margin: 0px 1rem 1rem; color: rgb(41, 43, 44); font-family: -apple-system, system-ui, BlinkMacSystemFont,"
+                            th:text="${taskBo.taskContent}">
+                                项目内容
+                            </p>
+
+                            <p><span style="box-sizing: inherit; font-weight: bolder;"></span></p>
+                            <p></p></div>
+                    </div>
+
+                    <div th:if="${#bools.arrayAnd({taskBo.projectPublisher eq session.ucUser.userAccount,taskBo.tcScore == null})}" class="single-footer">
+                        <div class="single-heart">
+                            <a href="#" class="user-signin" id="addScoreBtn" data-id="9" data-mid="2">
+                                <i class="fa fa-heart"></i>
+                                <span class="heart-text">评价</span>
+                            </a>
+                            <div class="loading-line"></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="area" th:if="${taskBo.tcScore} != null">
+            <div id="comments" class="comments">
+                <h2 class="comments-title" style="padding-top:0">
+                    分数 / <strong th:text="${taskBo.tcScore.score}"></strong>
+                </h2>
+                <ol class="comment-list">
+                    <li class="comment even thread-even depth-1">
+                        <div class="comment-body">
+                            <div class="comment-author vcard">
+                                <a target="_blank" th:title="${taskBo.tcScore.userAccount}" href="#">
+                                    <img th:src="@{/assets/images/head.jpg}"
+                                         class="avatar" width="44" height="44"/>
+                                </a>
+                            </div>
+                            <div class="comment-main">
+                                <p th:text="${'标题：'+taskBo.tcScore.scoreTitle}"></p>
+                                <p th:text="${'评语：'+taskBo.tcScore.scoreContent}"></p>
+                                <div class="comment-meta">
+                                        <span class="author">
+                                            <cite th:text="${taskBo.tcScore.userAccount}"></cite></span>
+                                    <span class="date" th:text="${#strings.substring(taskBo.tcScore.createTime,0,16)}"></span>
+                                </div>
+                            </div>
+                            <div class="comment-floor" th:if="${session.ucUser.userAccount eq taskBo.tcScore.userAccount}" style="color: #00b5a9"><a th:href="@{'../score/edit_score.html?scoreId='+${taskBo.tcScore.scoreId}}">修改</a></div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!--尾部-->
+<div class="fly-footer" style="margin-bottom: 60px;" th:include="common/footer :: #web_footer"></div>
+
+<script>
+    $(function () {
+        if (getCurrentUser() == null) {
+            location.replace(appServer + "login.html");
+        }
+
+        layui.use(['form'], function () {
+            var form = layui.form;
+            form.render();
+            //提交
+            form.on('submit(add_score)', function (obj) {
+                layer.load(1);
+                $.post(appServer + "score/add_score.json", obj.field, function (data) {
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        var taskId = $("#taskIdInpt").val();
+                        setTimeout(function() {
+                            location.replace(appServer+"task/task_detail/"+taskId+".html");
+                        }, 2000);
+                    } else {
+                        layer.closeAll('loading');
+                        layer.msg(data.msg, {icon: 2});
+                        return false;
+                    }
+                }, "json");
+                return false;
+            });
+        });
+    });
+    //添加按钮点击事件
+    $("#addScoreBtn").click(function(){
+        showEditModel(null);
+    });
+
+    //显示表单弹窗
+    function showEditModel(data){
+        layer.open({
+            type: 1,
+            title: '教师评分',
+            area: '650px',
+            offset: '80px',
+            content: $("#addScore").html()
+        });
+        $("#addScoreForm")[0].reset();
+        $("#addScoreForm").attr("method","POST");
+        var selectItem = "";
+        $("#btnCancel").click(function(){
+            layer.closeAll('page');
+        });
+    }
+</script>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="addScore">
+    <form id="addScoreForm" class="layui-form model-form" action="">
+        <input name="userId" type="hidden" th:value="${session.ucUser.userId}"/>
+        <input name="userAccount" type="hidden" th:value="${session.ucUser.userAccount}"/>
+        <input name="taskId" type="hidden" th:value="${taskBo.taskId}"/>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">分数</label>
+            <div class="layui-input-block">
+                <input name="score" placeholder="请输入分数" type="text" class="layui-input" maxlength="20"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input name="scoreTitle" placeholder="请输入标题" type="text" class="layui-input" maxlength="20" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <textarea name="scoreContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item model-form-footer">
+            <button class="layui-btn layui-btn-primary" type="button" id="btnCancel">取消</button>
+            <button class="layui-btn" lay-filter="add_score" lay-submit="true">保存</button>
+        </div>
+    </form>
+</script>
+</body>
+</html>

@@ -4,10 +4,10 @@ package com.lifen.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ProjectTypeEnum {
-    OPEN_A_SHOP(0, "创新项目"),
-    INNOVATE(1, "创业项目"),
-    OTHER_TYPE(2, "其他项目"),
+public enum TaskTypeEnum {
+    OPEN_TITLE_TASK(0, "开题任务"),
+    NORMAL_TASK(1, "正式任务"),
+    OTHER_TASK(2, "其他"),
     ;
 
     private Integer code;
@@ -30,14 +30,14 @@ public enum ProjectTypeEnum {
         this.message = message;
     }
 
-    ProjectTypeEnum(Integer code, String message) {
+    TaskTypeEnum(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
 
     public static Map<Integer,String> toMap() {
         Map<Integer,String> enumMap = new HashMap<>();
-        for (ProjectTypeEnum element: values()) {
+        for (TaskTypeEnum element: values()) {
             enumMap.put(element.getCode(),element.getMessage());
         }
         return enumMap;

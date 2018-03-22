@@ -2,15 +2,19 @@ package com.lifen.controller;
 
 import com.lifen.constant.ProjectConstant;
 import com.lifen.dataobject.TaProject;
+import com.lifen.dataobject.TcTask;
 import com.lifen.dataobject.UcUsers;
+import com.lifen.dto.ProjectBo;
 import com.lifen.enums.IsDeletedEnum;
 import com.lifen.enums.ProjectStatusEnum;
 import com.lifen.enums.ProjectTypeEnum;
 import com.lifen.enums.UserTypeEnum;
 import com.lifen.service.TaProjectService;
+import com.lifen.service.TcTaskService;
 import com.lifen.utils.PageResult;
 import com.lifen.utils.ResultMap;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +33,8 @@ public class ProjectController {
 
     @Autowired
     private TaProjectService taProjectService;
+    @Autowired
+    private TcTaskService tcTaskService;
 
     @RequestMapping("project/project_list")
     public String getProjectList(@RequestParam(value = "page",required = false) Integer page,
@@ -43,10 +49,6 @@ public class ProjectController {
         if (taProject == null) {
             taProject = new TaProject();
         }
-        /*UcUsers ucUser = (UcUsers) request.getSession().getAttribute(ProjectConstant.UC_USER_SESSION_KEY);
-        if (ucUser != null && StringUtils.equals(ucUser.getUserType(), UserTypeEnum.TEACHER)) {
-            taProject.setUserAccount(ucUser.getUserAccount());
-        }*/
         PageRequest pageRequest = new PageRequest(page - 1,limit);
         taProject.setIsDeleted(IsDeletedEnum.NO.getCode());
         Page<TaProject> result = taProjectService.getProjectList(pageRequest,taProject);
@@ -86,7 +88,14 @@ public class ProjectController {
         if (StringUtils.isEmpty(projectCode)) {
             return "views/error";
         }
-        model.addAttribute("project",taProjectService.findByProjectCode(projectCode));
+        TaProject project = taProjectService.findByProjectCode(projectCode);
+        PageRequest pageRequest = new PageRequest(0,10);
+        Page<TcTask> taskResult = tcTaskService.findByProjectId(project.getProjectId(),pageRequest);
+        ProjectBo projectBo = new ProjectBo();
+        BeanUtils.copyProperties(project,projectBo);
+        projectBo.setTaskPage(taskResult);
+        model.addAttribute("project",projectBo);
+        model.addAttribute("projectTypeMap", ProjectTypeEnum.toMap());
         return "views/project_detail";
     }
 
