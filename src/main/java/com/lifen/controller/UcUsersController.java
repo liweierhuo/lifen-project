@@ -2,9 +2,11 @@ package com.lifen.controller;
 
 import com.lifen.constant.ProjectConstant;
 import com.lifen.dataobject.UcUsers;
+import com.lifen.dto.UcUserQuery;
 import com.lifen.enums.IsDeletedEnum;
 import com.lifen.enums.UserTypeEnum;
 import com.lifen.service.UcUsersService;
+import com.lifen.utils.DateUtil;
 import com.lifen.utils.PageResult;
 import com.lifen.utils.ResultMap;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +16,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.DateUtils;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by 廖师兄
@@ -33,22 +38,36 @@ public class UcUsersController {
 
     @ResponseBody
     @GetMapping("admin/get_teacherList")
-    public PageResult<UcUsers> getTeacherList(Integer page, Integer limit,Model model, UcUsers ucUsers){
-        PageRequest pageRequest = new PageRequest(page - 1,limit);
-        ucUsers.setUserType(UserTypeEnum.TEACHER.getCode());
-        ucUsers.setIsDeleted(IsDeletedEnum.NO.getCode());
-        Page<UcUsers> result = ucUsersService.getUserList(pageRequest,ucUsers);
-        PageResult<UcUsers> userList = new PageResult<UcUsers>(result.getTotalElements(),result.getContent());
-        return userList;
+    public PageResult<UcUsers> getTeacherList(Integer page, Integer limit,Model model,
+                                              UcUserQuery ucUserQuery,HttpServletRequest request){
+        try {
+            PageRequest pageRequest = new PageRequest(page - 1,limit);
+            if (!StringUtils.isEmpty(request.getParameter("startTime"))) {
+                Date startTime = DateUtil.convertStringTODate(request.getParameter("startTime"), "YYYY-MM-dd");
+                ucUserQuery.setCreateStartTime(startTime);
+                ucUserQuery.setCreateEndTime(new Date());
+            }
+            if (!StringUtils.isEmpty(request.getParameter("endTime"))) {
+                Date endTime = DateUtil.convertStringTODate(request.getParameter("endTime"), "YYYY-MM-dd");
+                ucUserQuery.setCreateEndTime(endTime);
+            }
+            ucUserQuery.setUserType(UserTypeEnum.TEACHER.getCode());
+            ucUserQuery.setIsDeleted(IsDeletedEnum.NO.getCode());
+            Page<UcUsers> result = ucUsersService.getUserList(pageRequest,ucUserQuery);
+            PageResult<UcUsers> userList = new PageResult<UcUsers>(result.getTotalElements(),result.getContent());
+            return userList;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @ResponseBody
     @GetMapping("admin/get_studentList")
-    public PageResult<UcUsers> getStudentList(Integer page, Integer limit,Model model, UcUsers ucUsers){
+    public PageResult<UcUsers> getStudentList(Integer page, Integer limit,Model model, UcUserQuery ucUserQuery){
         PageRequest pageRequest = new PageRequest(page - 1,limit);
-        ucUsers.setUserType(UserTypeEnum.STUDENT.getCode());
-        ucUsers.setIsDeleted(IsDeletedEnum.NO.getCode());
-        Page<UcUsers> result = ucUsersService.getUserList(pageRequest,ucUsers);
+        ucUserQuery.setUserType(UserTypeEnum.STUDENT.getCode());
+        ucUserQuery.setIsDeleted(IsDeletedEnum.NO.getCode());
+        Page<UcUsers> result = ucUsersService.getUserList(pageRequest,ucUserQuery);
         PageResult<UcUsers> userList = new PageResult<UcUsers>(result.getTotalElements(),result.getContent());
         return userList;
     }
@@ -63,11 +82,13 @@ public class UcUsersController {
         ucUsers.setIsDeleted(IsDeletedEnum.NO.getCode());
         UcUsers userResult = ucUsersService.findByUserAccountOrUserId(ucUsers.getUserAccount(),ucUsers.getUserId());
         if (userResult != null) {
-            return ResultMap.error("用户账号不能重复");
+            if (userResult.getUserId() != ucUsers.getUserId()) {
+                return ResultMap.error("用户账号不能重复");
+            }
         }
         UcUsers ucUser = ucUsersService.userReg(ucUsers);
         if (ucUser != null) {
-            return ResultMap.ok("操作成功，跳转到登录页面");
+            return ResultMap.ok("操作成功");
         } else {
             return ResultMap.error();
         }
@@ -161,5 +182,25 @@ public class UcUsersController {
         }
 
     }
+
+    @ResponseBody
+    @PostMapping("/uc/deleteUser/{userId}")
+    public ResultMap deleteUser(HttpServletRequest request,@PathVariable("userId") Long userId){
+        try {
+            if(userId == null) {
+                return ResultMap.error("userId 不能为空");
+            }
+            if (ucUsersService.logicDelete(userId)) {
+                return ResultMap.ok("操作成功");
+            } else {
+                return ResultMap.error();
+            }
+        } catch (Exception e) {
+            log.error("/uc/deleteUser is error {}",e.getMessage());
+            return ResultMap.error(e.getMessage());
+        }
+
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.lifen.service;
 
 import com.lifen.dataobject.UcUsers;
+import com.lifen.dto.UcUserQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -24,8 +25,10 @@ public interface UcUsersService {
     UcUsers userReg(UcUsers ucUsers);
 
     void delete(Long userId);
+
+    boolean logicDelete(Long userId);
     UcUsers update(UcUsers ucUsers) throws Exception;
     UcUsers findByUserAccountOrUserId(String userAccount,Long userId);
 
-    Page<UcUsers> getUserList(PageRequest pageRequest,UcUsers user);
+    Page<UcUsers> getUserList(PageRequest pageRequest,UcUserQuery ucUserQuery);
 }

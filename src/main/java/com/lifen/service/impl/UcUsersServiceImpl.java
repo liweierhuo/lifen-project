@@ -2,6 +2,7 @@ package com.lifen.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lifen.dataobject.UcUsers;
+import com.lifen.dto.UcUserQuery;
 import com.lifen.enums.IsDeletedEnum;
 import com.lifen.repository.UcUsersRepository;
 import com.lifen.service.UcUsersService;
@@ -59,6 +60,15 @@ public class UcUsersServiceImpl implements UcUsersService {
         ucUsersRepository.delete(userId);
     }
 
+    @Transient
+    @Override
+    public boolean logicDelete(Long userId) {
+        UcUsers ucUser = ucUsersRepository.findOne(userId);
+        ucUser.setIsDeleted(IsDeletedEnum.YES.getCode());
+        ucUsersRepository.save(ucUser);
+        return true;
+    }
+
     @Override
     public UcUsers update(UcUsers ucUsers) throws Exception{
         if (ucUsers.getUserId() == null ) {
@@ -81,24 +91,28 @@ public class UcUsersServiceImpl implements UcUsersService {
     }
 
     @Override
-    public Page<UcUsers> getUserList(PageRequest pageRequest, UcUsers ucUser) {
+    public Page<UcUsers> getUserList(PageRequest pageRequest, UcUserQuery ucUserQuery) {
         Pageable pageable = new PageRequest(pageRequest.getPageNumber(), pageRequest.getPageSize(), Sort.Direction.DESC, "userId");
         Specification<UcUsers> userSpec = new Specification<UcUsers>() {
             @Override
             public Predicate toPredicate(Root<UcUsers> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = new ArrayList<Predicate>();
-                if(null != ucUser.getUserType() &&! "".equals(ucUser.getUserType())){
-                    list.add(criteriaBuilder.equal(root.get("userType").as(String.class), ucUser.getUserType()));
+                if(null != ucUserQuery.getUserType() &&! "".equals(ucUserQuery.getUserType())){
+                    list.add(criteriaBuilder.equal(root.get("userType").as(String.class), ucUserQuery.getUserType()));
                 }
-                if(null!=ucUser.getUserName() &&!"".equals(ucUser.getUserName())){
-                    list.add(criteriaBuilder.like(root.get("userName").as(String.class), ucUser.getUserName()));
+                if(null!=ucUserQuery.getUserName() &&!"".equals(ucUserQuery.getUserName())){
+                    list.add(criteriaBuilder.like(root.get("userName").as(String.class), ucUserQuery.getUserName()));
                 }
-                if(null!=ucUser.getUserAccount()&&!"".equals(ucUser.getUserAccount())){
-                    list.add(criteriaBuilder.equal(root.get("userAccount").as(String.class), ucUser.getUserAccount()));
+                if(null!=ucUserQuery.getUserAccount()&&!"".equals(ucUserQuery.getUserAccount())){
+                    list.add(criteriaBuilder.equal(root.get("userAccount").as(String.class), ucUserQuery.getUserAccount()));
+                }
+                if(null!=ucUserQuery.getCreateStartTime() && null != ucUserQuery.getCreateEndTime()){
+                    list.add(criteriaBuilder.between(root.get("createTime").as(Date.class),
+                            ucUserQuery.getCreateStartTime(),ucUserQuery.getCreateEndTime()));
                 }
 
-                if(null!=ucUser.getIsDeleted()&&!"".equals(ucUser.getIsDeleted())){
-                    list.add(criteriaBuilder.equal(root.get("isDeleted").as(String.class), ucUser.getIsDeleted()));
+                if(null!=ucUserQuery.getIsDeleted()&&!"".equals(ucUserQuery.getIsDeleted())){
+                    list.add(criteriaBuilder.equal(root.get("isDeleted").as(String.class), ucUserQuery.getIsDeleted()));
                 }
                 Predicate[] p = new Predicate[list.size()];
                 return criteriaBuilder.and(list.toArray(p));

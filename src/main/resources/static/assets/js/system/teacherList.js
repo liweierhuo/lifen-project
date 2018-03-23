@@ -4,7 +4,6 @@ $(function() {
 		elem : '#table',
 		url : appServer+'admin/get_teacherList.json',
  		where: {
-	  		token : getToken()
 		},
 		page: true,
 		cols: [[
@@ -71,20 +70,20 @@ $(function() {
         });
         $("#editForm")[0].reset();
         $("#editForm").attr("method","POST");
-        var selectItem = "";
         if(data!=null){
             $("#editForm input[name=userId]").val(data.userId);
             $("#editForm input[name=userAccount]").val(data.userAccount);
             $("#editForm input[name=userName]").val(data.userName);
             $("#editForm input[name=userType]").val(data.userType);
-            $("#editForm").attr("method","PUT");
-            selectItem = data.roleId;
-            if('男'==data.sex){
-                $("#sexMan").attr("checked","checked");
-                $("#sexWoman").removeAttr("checked");
+            $("#editForm input[name=mobile]").val(data.mobile);
+            $("#editForm input[name=userTitle]").val(data.userTitle);
+            $("#editForm input[name=email]").val(data.email);
+            if('男'==data.gender){
+                $("#genderMan").attr("checked","checked");
+                $("#genderWoman").removeAttr("checked");
             }else{
-                $("#sexWoman").attr("checked","checked");
-                $("#sexMan").removeAttr("checked");
+                $("#genderWoman").attr("checked","checked");
+                $("#genderMan").removeAttr("checked");
             }
             layui.form.render('radio');
         }
@@ -97,7 +96,8 @@ $(function() {
 		elem: '#searchDate',
 		type: 'date',
 		range: true,
-		theme: '#393D49'
+		theme: '#393D49',
+        format:'yyyy-MM-dd'
 	});
 	
 	//搜索按钮点击事件
@@ -115,15 +115,37 @@ $(function() {
             showEditModel(data);
         } else if(layEvent === 'del'){ //删除
             doDelete(obj);
-        } else if(layEvent === 'reset'){ //重置密码
+        } /*else if(layEvent === 'reset'){ //重置密码
             doReSet(obj.data.userId);
-        }
+        }*/
     });
 });
 
 //搜索
 function doSearch(){
 	var searchDate = $("#searchDate").val().split(" - ");
-	var searchAccount = $("#searchAccount").val();
-	layui.table.reload('table', {where: {startDate: searchDate[0], endDate: searchDate[1], account: searchAccount}});
+	var userAccount = $("#userAccount").val();
+	layui.table.reload('table', {where: {startTime: searchDate[0], endTime: searchDate[1], userAccount: userAccount}});
+}
+
+//删除
+function doDelete(obj){
+    layer.confirm('确定要删除吗？', function(index){
+        layer.close(index);
+        layer.load(1);
+        $.ajax({
+            url: appServer+"/uc/deleteUser/"+obj.data.userId+".json",
+            type: "POST",
+            dataType: "JSON",
+            success: function(data){
+                layer.closeAll('loading');
+                if(data.code==200){
+                    layer.msg(data.msg,{icon: 1});
+                    obj.del();
+                }else{
+                    layer.msg(data.msg,{icon: 2});
+                }
+            }
+        });
+    });
 }
